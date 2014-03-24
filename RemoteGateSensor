@@ -1,0 +1,34 @@
+// Using 2 wire hall effect sensor L16A3-5-Z/DX
+//
+//   VCC---680ohm---(BRN--Sensor--BLU)--GND
+//                 |--330K---AO---330K-|
+// 
+//  ***Note min VCC = 5.7V***
+//  
+//  Arduino is 3.3volt
+//
+int GateState = 0;//potentiometer value
+int GateStatus = 9;//lights when open
+int GateTrigger = 400;// gate open reading 270 / gate closed 500-700 depending on VCC
+int GateInput = A0; // gate sensor connection
+
+void setup() {
+Serial.begin(9600);
+  pinMode(GateStatus, OUTPUT); // indicator light
+  pinMode(GateInput, INPUT); // Gate Input
+  analogReference(INTERNAL); //use internal reference for reliability
+}
+
+void loop() {
+   GateState = analogRead(GateInput); //read Gate status
+   Serial.println(GateState);  
+     if (GateState < GateTrigger) { // if gate open set indicator ON
+      digitalWrite(GateStatus, HIGH);
+      delay(50);
+    } 
+    else
+    {  
+      digitalWrite(GateStatus, LOW); // if gate open set indicator ON
+      delay(50);
+    }
+}
